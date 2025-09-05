@@ -66,6 +66,7 @@ interface UserCacheStore {
   favorites?: CacheData<Record<string, Favorite>>;
   searchHistory?: CacheData<string[]>;
   skipConfigs?: CacheData<Record<string, SkipConfig>>;
+  // 注意：豆瓣缓存已迁移到统一存储，不再需要这里的缓存结构
 }
 
 // ---- 常量 ----
@@ -77,6 +78,8 @@ const SEARCH_HISTORY_KEY = 'moontv_search_history';
 const CACHE_PREFIX = 'moontv_cache_';
 const CACHE_VERSION = '1.0.0';
 const CACHE_EXPIRE_TIME = 60 * 60 * 1000; // 一小时缓存过期
+
+// 注意：豆瓣缓存配置已迁移到 douban.client.ts
 
 // ---- 环境变量 ----
 const STORAGE_TYPE = (() => {
@@ -188,6 +191,8 @@ class HybridCacheManager {
     if (cache.favorites && now - cache.favorites.timestamp > maxAge) {
       delete cache.favorites;
     }
+
+    // 注意：豆瓣缓存已迁移到统一存储，不再在这里处理
   }
 
   /**
@@ -391,6 +396,66 @@ class HybridCacheManager {
     } catch (error) {
       console.warn('清除过期缓存失败:', error);
     }
+  }
+
+  // ---- 豆瓣数据缓存方法 ----
+
+  // 注意：以下豆瓣缓存相关方法已废弃，豆瓣缓存已迁移到统一存储系统
+  // 这些方法保留是为了向后兼容，但不再使用
+
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  private isDoubanCacheValid<T>(cache: CacheData<T>, type: 'details' | 'lists'): boolean {
+    return false; // 始终返回false，强制使用新的缓存系统
+  }
+
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  getDoubanDetails(id: string): any | null {
+    return null; // 不再使用本地缓存，返回null强制使用新系统
+  }
+
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  setDoubanDetails(id: string, data: any): void {
+    // 不再使用本地缓存，空实现
+  }
+
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  getDoubanList(cacheKey: string): any | null {
+    return null; // 不再使用本地缓存，返回null强制使用新系统
+  }
+
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  setDoubanList(cacheKey: string, data: any): void {
+    // 不再使用本地缓存，空实现
+  }
+
+  /**
+   * 生成豆瓣列表缓存键
+   */
+  static generateDoubanListKey(type: string, tag: string, pageStart: number, pageSize: number): string {
+    return `${type}:${tag}:${pageStart}:${pageSize}`;
+  }
+
+  /**
+   * 清除豆瓣缓存
+   */
+  /**
+   * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+   */
+  clearDoubanCache(): void {
+    // 不再使用本地缓存，空实现
   }
 }
 
@@ -1655,4 +1720,55 @@ export async function deleteSkipConfig(
     triggerGlobalError('删除跳过片头片尾配置失败');
     throw err;
   }
+}
+
+// ---- 豆瓣数据缓存导出函数 ----
+
+/**
+ * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+ * @param id 豆瓣ID
+ * @returns null
+ */
+export function getDoubanDetailsCache(id: string): any | null {
+  return null; // 不再使用本地缓存
+}
+
+/**
+ * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+ * @param id 豆瓣ID
+ * @param data 详情数据
+ */
+export function setDoubanDetailsCache(id: string, data: any): void {
+  // 不再使用本地缓存
+}
+
+/**
+ * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+ * @param type 类型 (tv/movie)
+ * @param tag 标签
+ * @param pageStart 页面起始位置
+ * @param pageSize 页面大小
+ * @returns null
+ */
+export function getDoubanListCache(type: string, tag: string, pageStart: number, pageSize: number): any | null {
+  return null; // 不再使用本地缓存
+}
+
+/**
+ * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+ * @param type 类型 (tv/movie) 
+ * @param tag 标签
+ * @param pageStart 页面起始位置
+ * @param pageSize 页面大小
+ * @param data 列表数据
+ */
+export function setDoubanListCache(type: string, tag: string, pageStart: number, pageSize: number, data: any): void {
+  // 不再使用本地缓存
+}
+
+/**
+ * @deprecated 豆瓣缓存已迁移到统一存储，请使用 douban.client.ts 中的方法
+ */
+export function clearDoubanCache(): void {
+  // 不再使用本地缓存
 }

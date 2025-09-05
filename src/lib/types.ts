@@ -83,6 +83,12 @@ export interface IStorage {
 
   // 数据清理相关
   clearAllData(): Promise<void>;
+
+  // 通用缓存相关（新增）
+  getCache(key: string): Promise<any | null>;
+  setCache(key: string, data: any, expireSeconds?: number): Promise<void>;
+  deleteCache(key: string): Promise<void>;
+  clearExpiredCache(prefix?: string): Promise<void>;
 }
 
 // 搜索结果数据结构
@@ -108,6 +114,18 @@ export interface DoubanItem {
   poster: string;
   rate: string;
   year: string;
+  // 详细信息字段
+  directors?: string[];
+  screenwriters?: string[];
+  cast?: string[];
+  genres?: string[];
+  countries?: string[];
+  languages?: string[];
+  episodes?: number;
+  episode_length?: number;
+  movie_duration?: number;
+  first_aired?: string;
+  plot_summary?: string;
 }
 
 export interface DoubanResult {
